@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Almacen;
 use Illuminate\Http\Request;
 
+use App\UsuariosAlmacen;
+
 class AlmacenController extends Controller
 {
     /**
@@ -24,7 +26,7 @@ class AlmacenController extends Controller
      */
     public function create()
     {
-        
+        return view("/crearAlmacen");
     }
 
     /**
@@ -35,7 +37,25 @@ class AlmacenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $Almacen = new Almacen();
+        $Almacen->nombreAlmacen = $request->nombreAlmacen;
+        $Almacen->descripcion = $request->descripcion;
+        
+        //Guardar y crear al propietario
+        if ($Almacen->save()){
+        // if (false){
+            $usuarioAlmacen = new UsuariosAlmacen();
+            $usuarioAlmacen->idUsuario = $request->idUsuario; //Propietario
+            $usuarioAlmacen->idAlmacen = $Almacen->id;
+            $usuarioAlmacen->tipoDeAcceso = "propietario";
+            $usuarioAlmacen->save();
+            //NOTA: Pendiente ver donde crear y ASIGNAR EL ROL
+            // return redirect("/almacen{id}");
+            return redirect("/home");
+        } else {
+            $mensaje = "No se ha podido completar la petición, intente más tarde.";
+            return view("/crearAlmacen")->with('mensaje', $mensaje);
+        }
     }
 
     /**
