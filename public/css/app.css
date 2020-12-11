@@ -1,5 +1,33 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
+:root {
+  --colorPrimario: #F2780C;
+  --colorSecundario: #F2B705;
+  --colorFondo: #F2F2F2;
+  --colorTexto: #0D0D0D;
+  --colorAlternativo: #56A9B8;
+}
+
+.bg-colorPrimario {
+  background-color: #F2780C !important;
+}
+
+.bg-colorSecundario {
+  background-color: #F2B705 !important;
+}
+
+.bg-colorFondo {
+  background-color: #F2F2F2 !important;
+}
+
+.bg-colorTexto {
+  background-color: #0D0D0D !important;
+}
+
+.bg-colorAlternativo {
+  background-color: #56A9B8 !important;
+}
+
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors

@@ -1,7 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,9 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome'); 
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/crearNuevoAlmacen', 'AlmacenController@create');
+
+/*
+Route::post('/nuevaRefaccion', "piezasRefaccionController@store");
+Route::get('/editarRegistro/{id}', "piezasRefaccionController@edit");
+*/

@@ -24,7 +24,7 @@ class AlmacenController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

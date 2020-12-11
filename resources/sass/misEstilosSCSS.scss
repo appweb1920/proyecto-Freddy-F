@@ -1,0 +1,21 @@
+//Colores seleccionados
+$colorPrimario: #F2780C;
+$colorSecundario: #F2B705;
+$colorFondo: #F2F2F2;
+$colorTexto: #0D0D0D;
+$colorAlternativo: #56A9B8;
+
+:root {
+    --colorPrimario: #F2780C;
+    --colorSecundario: #F2B705;
+    --colorFondo: #F2F2F2;
+    --colorTexto: #0D0D0D;
+    --colorAlternativo: #56A9B8;
+}
+
+//Nuevos colores de Fondo
+.bg-colorPrimario {background-color: $colorPrimario !important;}
+.bg-colorSecundario {background-color: $colorSecundario !important;}
+.bg-colorFondo {background-color: $colorFondo !important;}
+.bg-colorTexto {background-color: $colorTexto !important;}
+.bg-colorAlternativo {background-color: $colorAlternativo !important;}
