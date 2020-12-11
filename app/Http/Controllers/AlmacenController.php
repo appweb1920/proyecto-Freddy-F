@@ -14,9 +14,15 @@ class AlmacenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($idUsuario)
     {
-        //
+        //Obten los ID de los almacenes donde este el usuario
+        $idAlmacenes = UsuariosAlmacen::where('idUsuario', $idUsuario)->get('idAlmacen');
+        
+        //Obten los Almacenes con determinadas ID.
+        $almacenes = Almacen::whereIn('id', $idAlmacenes)->get();
+        
+        return view('verAlmacenes')->with('almacenes', "dato");
     }
 
     /**
@@ -40,18 +46,16 @@ class AlmacenController extends Controller
         $Almacen = new Almacen();
         $Almacen->nombreAlmacen = $request->nombreAlmacen;
         $Almacen->descripcion = $request->descripcion;
-        
         //Guardar y crear al propietario
         if ($Almacen->save()){
-        // if (false){
             $usuarioAlmacen = new UsuariosAlmacen();
             $usuarioAlmacen->idUsuario = $request->idUsuario; //Propietario
             $usuarioAlmacen->idAlmacen = $Almacen->id;
             $usuarioAlmacen->tipoDeAcceso = "propietario";
             $usuarioAlmacen->save();
             //NOTA: Pendiente ver donde crear y ASIGNAR EL ROL
-            // return redirect("/almacen{id}");
-            return redirect("/home");
+            // return redirect("/almacen/{id}");
+            return redirect('/misAlmacenes/'.$request->idUsuario);
         } else {
             $mensaje = "No se ha podido completar la petición, intente más tarde.";
             return view("/crearAlmacen")->with('mensaje', $mensaje);

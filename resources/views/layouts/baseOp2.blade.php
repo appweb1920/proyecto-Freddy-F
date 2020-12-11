@@ -80,7 +80,7 @@
                             Almacenes
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Mis almacenes</a>
+                            <a class="dropdown-item" href="/misAlmacenes/{{ Auth::user()->id }}">Mis almacenes</a>
                             <a class="dropdown-item" href="/crearNuevoAlmacen">Crear nuevo almacén</a>
                         </div>
                     </li>

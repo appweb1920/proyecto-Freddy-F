@@ -24,6 +24,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/crearNuevoAlmacen', 'AlmacenController@create');
 Route::post('/crearNuevoAlmacen', 'AlmacenController@store');
 
+Route::get('/misAlmacenes/{idUsuario}', 'AlmacenController@index');
+Route::get('/almacen/{id}', 'AlmacenController@show');
+
+Route::get('/verAlmacenes', function () {
+    return view('/verAlmacenes'); 
+});
+
 /*
 Route::post('/nuevaRefaccion', "piezasRefaccionController@store");
 Route::get('/editarRegistro/{id}', "piezasRefaccionController@edit");
