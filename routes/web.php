@@ -21,15 +21,21 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/crearNuevoAlmacen', 'AlmacenController@create');
-Route::post('/crearNuevoAlmacen', 'AlmacenController@store');
+Route::get('/crearNuevoAlmacen', 'AlmacenController@create')->middleware('auth');
+Route::post('/crearNuevoAlmacen', 'AlmacenController@store')->middleware('auth');
 
-Route::get('/misAlmacenes/{idUsuario}', 'AlmacenController@index');
-Route::get('/almacen/{id}', 'AlmacenController@show');
+Route::get('/misAlmacenes/{idUsuario}', 'AlmacenController@index')->middleware('auth');
+Route::get('/misAlmacenes/{idUsuario}/{idUsuarioAlmacen}/almacen/{idAlmacen}', 'AlmacenController@show')->middleware('auth');
+Route::get('/misAlmacenes/{idUsuario}/{idUsuarioAlmacen}/almacen/{idAlmacen}/invitarUsuario', 'InvitacionesAlmacenController@create')->middleware('auth');
+Route::post('/invitarUsuario', 'InvitacionesAlmacenController@store')->middleware('auth');
 
-Route::get('/verAlmacenes', function () {
-    return view('/verAlmacenes'); 
+
+Route::get('/ejemplos', function () {
+    return view('/layouts.ejemplos'); 
 });
+
+
+
 
 /*
 Route::post('/nuevaRefaccion', "piezasRefaccionController@store");

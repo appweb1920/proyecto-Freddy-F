@@ -15,10 +15,9 @@
             <div class="form-row">
                 <div class="col-lg-12 mb-3">
                     <label for="validationTooltip01">Nombre del almacén:</label>
-                    <input type="text" class="form-control" name="nombreAlmacen" id="validationTooltip01" placeholder="Mi almacén" required>
-                    <div class="valid-feedback">
-                        Ok!
-                    </div>
+                    <input type="text" class="form-control" name="nombreAlmacen" id="validationDefault01" placeholder="Mi almacén" required>
+                    <div class="valid-feedback"> Campo válido </div>
+                    <div class="invalid-feedback"> Campo inválido </div>
                 </div>
             </div>
             <div class="form-row">
@@ -26,9 +25,8 @@
                     <label for="validationDefault02">Descripción:</label>
                     <textarea class="form-control" name="descripcion" id="validationDefault02" rows="5" placeholder="Este es un almacen privado" required>
                     </textarea>
-                    <div class="valid-feedback">
-                        Ok!
-                    </div>
+                    <div class="valid-feedback"> Campo válido </div>
+                    <div class="invalid-feedback"> Campo inválido </div>
                 </div>
             </div>
             @isset($mensaje)

@@ -24,3 +24,16 @@ $colorAlternativo: #56A9B8;
 .bg-colorFondo {background-color: $colorFondo !important;}
 .bg-colorTexto {background-color: $colorTexto !important;}
 .bg-colorAlternativo {background-color: $colorAlternativo !important;}
+
+.text-colorPrimario {color: $colorPrimario !important;}
+.text-colorSecundario {color: $colorSecundario !important;}
+.text-colorFondo {color: $colorFondo !important;}
+.text-colorTexto {color: $colorTexto !important;}
+.text-colorAlternativo {color: $colorAlternativo !important;}
+
+a.text-colorPrimario:hover,
+a.text-colorPrimario:focus { color: $colorSecundario !important; }
+a.text-colorSecundario:hover,
+a.text-colorSecundario:focus { color: $colorPrimario !important; }
+
+// .almacenDescription{height: 3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;} 

@@ -32,6 +32,36 @@ div {
   background-color: #56A9B8 !important;
 }
 
+.text-colorPrimario {
+  color: #F2780C !important;
+}
+
+.text-colorSecundario {
+  color: #F2B705 !important;
+}
+
+.text-colorFondo {
+  color: #F2F2F2 !important;
+}
+
+.text-colorTexto {
+  color: #0D0D0D !important;
+}
+
+.text-colorAlternativo {
+  color: #56A9B8 !important;
+}
+
+a.text-colorPrimario:hover,
+a.text-colorPrimario:focus {
+  color: #F2B705 !important;
+}
+
+a.text-colorSecundario:hover,
+a.text-colorSecundario:focus {
+  color: #F2780C !important;
+}
+
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors

@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\InvitacionesAlmacen;
 use Illuminate\Http\Request;
 
+
+use App\UsuariosAlmacen;
+// use App\Almacen;
+use App\User;
+
 class InvitacionesAlmacenController extends Controller
 {
     /**
@@ -22,9 +27,26 @@ class InvitacionesAlmacenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($idUsuario, $idUsuarioAlmacen, $idAlmacen)
     {
-        //
+        //NOTA:Puede ser necesario verificar si existe un registro con esos datos.
+        // use App\Almacen;
+        // use App\UsuariosAlmacen;
+
+        //Verifica que el registro con los datos indicados exista.
+        $datosValidacion = UsuariosAlmacen::where('usuariosAlmacen.id', $idUsuarioAlmacen)
+                            ->join('almacen', 'usuariosAlmacen.idAlmacen', '=', 'almacen.id')
+                            ->where('almacen.id', $idAlmacen)
+                            ->where('usuariosAlmacen.idUsuario', $idUsuario)
+                            ->get()->first();
+
+        $validacion = (is_null($datosValidacion))? false:true;
+
+        return view('/crearInvitacion')
+            ->with('validacion', $validacion)
+            ->with('idUsuario', $idUsuario)
+            ->with('idUsuarioAlmacen',$idUsuarioAlmacen)
+            ->with('idAlmacen',$idAlmacen);
     }
 
     /**
@@ -35,7 +57,18 @@ class InvitacionesAlmacenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $invitacion = new InvitacionesAlmacen();
+        $invitacion->idAlmacen = $request->idAlmacen;
+        $invitacion->idUsuarioPropietario = $request->idUsuarioPropietario;
+        $invitacion->emailUsuarioInvitado = $request->emailUsuarioInvitado;
+        $invitacion->tipoDeAcceso = $request->tipoDeAcceso;
+        
+        //Verifica que el Email es de un usuario registrado
+        $validEmail = User::where('email', $request->emailUsuarioInvitado)->get()->first();
+        if( !is_null($validEmail) )
+            if($invitacion->save())
+                return redirect()->back()->with('invitacionEnviada', "La invitación fue enviada correctamente.");
+        return redirect()->back()->with('invitacionNoEnviada', "No se logro ralizar el envío.");
     }
 
     /**
