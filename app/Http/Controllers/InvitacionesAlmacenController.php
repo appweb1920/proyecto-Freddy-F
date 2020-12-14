@@ -17,9 +17,58 @@ class InvitacionesAlmacenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function indexParaAlmacen($idAlmacen)
     {
-        //
+        try {
+            //Devuelve las invitaciones realizadas por los propietarios de un almacén
+            $invitaciones = InvitacionesAlmacen::where('idAlmacen', $idAlmacen)
+                                        ->join('users', 'users.id', '=', 'invitacionesAlmacen.idUsuarioPropietario')
+                                        ->select('invitacionesAlmacen.*', 'users.nickname as remitente')
+                                        ->get();
+
+            foreach ($invitaciones as $key => $invitacion) {
+                // Valida que las invitaciones sigan (o no) vigentes en un lapso de 7 dias.
+                if( now()->diffInDays($invitacion->created_at) >= 7 ){
+                    $invitacion->estadoInvitacion = 'vencida';
+                    $invitacion->save();
+                }
+            }
+            return $invitaciones;
+
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function indexParaUsuario($idUsuario)
+    {
+        try {
+            $usuario = User::find($idUsuario);
+            
+            //Devuelve las invitaciones recibidas por un usuario registrado que no han sido actualizsadas
+            $invitaciones = InvitacionesAlmacen::where('emailUsuarioInvitado', $usuario->email)
+                                        ->where('estadoInvitacion', '!=','vencida')
+                                        ->join('almacen', 'almacen.id', '=', 'invitacionesAlmacen.idAlmacen')
+                                        ->join('users', 'users.id', '=', 'invitacionesAlmacen.idUsuarioPropietario')
+                                        ->select('invitacionesAlmacen.*', 'users.nickname as remitente', 'almacen.nombreAlmacen')
+                                        ->get();
+
+            // Valida que las invitaciones sigan (o no) vigentes en un lapso de 7 dias.    
+            foreach ($invitaciones as $key => $invitacion) {
+                if( now()->diffInDays($invitacion->created_at) >= 7 ){
+                    $invitacion->estadoInvitacion = 'vencida';
+                    $invitacion->save();
+                }
+            }
+
+            return view('verInvitacionedDeUsuario')
+                ->with('invitaciones', $invitaciones)
+                ->with('idUsuario', $idUsuario);
+        } catch (\Throwable $th) {
+            return view('verInvitacionedDeUsuario')
+                ->with('invitaciones', null)
+                ->with('idUsuario', $idUsuario);
+        }
     }
 
     /**
@@ -57,18 +106,19 @@ class InvitacionesAlmacenController extends Controller
      */
     public function store(Request $request)
     {
+        if (User::find($request->idUsuarioPropietario)->email == $request->emailUsuarioInvitado)
+            return redirect()->back()->with('invitacionNoEnviada', "No se puede seleccionar a si mismo como destinatario.");
+
         $invitacion = new InvitacionesAlmacen();
         $invitacion->idAlmacen = $request->idAlmacen;
         $invitacion->idUsuarioPropietario = $request->idUsuarioPropietario;
         $invitacion->emailUsuarioInvitado = $request->emailUsuarioInvitado;
         $invitacion->tipoDeAcceso = $request->tipoDeAcceso;
-        
-        //Verifica que el Email es de un usuario registrado
-        $validEmail = User::where('email', $request->emailUsuarioInvitado)->get()->first();
-        if( !is_null($validEmail) )
-            if($invitacion->save())
-                return redirect()->back()->with('invitacionEnviada', "La invitación fue enviada correctamente.");
-        return redirect()->back()->with('invitacionNoEnviada', "No se logro ralizar el envío.");
+        $invitacion->estadoInvitacion = 'pendiente';
+
+        if($invitacion->save())
+            return redirect()->back()->with('invitacionEnviada', "La invitación fue enviada correctamente.");
+        return redirect()->back()->with('invitacionNoEnviada', "No se logró realizar el envío.");
     }
 
     /**
@@ -79,7 +129,7 @@ class InvitacionesAlmacenController extends Controller
      */
     public function show(InvitacionesAlmacen $invitacionesAlmacen)
     {
-        //
+        //No se muestran de forma independiente, sino en grupo.
     }
 
     /**
@@ -90,7 +140,7 @@ class InvitacionesAlmacenController extends Controller
      */
     public function edit(InvitacionesAlmacen $invitacionesAlmacen)
     {
-        //
+        //No hay una vista unicamente para la edición.
     }
 
     /**
@@ -102,7 +152,17 @@ class InvitacionesAlmacenController extends Controller
      */
     public function update(Request $request, InvitacionesAlmacen $invitacionesAlmacen)
     {
-        //
+        $invitacionesAlmacen = InvitacionesAlmacen::find($request->idInvitacion);
+        $invitacionesAlmacen->estadoInvitacion = $request->respuestaInvitacion;
+        $invitacionesAlmacen->save();
+        if( $invitacionesAlmacen->estadoInvitacion == 'aceptada' ){
+            $usuarioAlmacen = new UsuariosAlmacen();
+            $usuarioAlmacen->idUsuario = $request->idUsuario; //Propietario
+            $usuarioAlmacen->idAlmacen = $invitacionesAlmacen->idAlmacen;
+            $usuarioAlmacen->tipoDeAcceso = $invitacionesAlmacen->tipoDeAcceso;
+            $usuarioAlmacen->save();
+        }
+        return redirect()->back()->with('verInvitaciones', true);
     }
 
     /**
@@ -111,8 +171,10 @@ class InvitacionesAlmacenController extends Controller
      * @param  \App\InvitacionesAlmacen  $invitacionesAlmacen
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InvitacionesAlmacen $invitacionesAlmacen)
+    public function destroy(Request $request, InvitacionesAlmacen $invitacionesAlmacen)
     {
-        //
+        $invitacionesAlmacen = InvitacionesAlmacen::find($request->idInvitacion);
+        $invitacionesAlmacen->delete();
+        return redirect()->back()->with('verInvitaciones', true);
     }
 }

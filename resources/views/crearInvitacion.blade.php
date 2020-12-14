@@ -17,8 +17,8 @@
                     <label for="validationDefault01">Correo de usuario invitado:</label>
                     <input type="email" class="form-control" name="emailUsuarioInvitado" id="validationDefault01" 
                         placeholder="Correo de usuario a invitar" required>
-                    <div class="valid-feedback"> Campo válido </div>
-                    <div class="invalid-feedback"> Campo inválido </div>
+                    <div class="valid-feedback"> Formato de campo válido </div>
+                    <div class="invalid-feedback"> Formato de campo inválido </div>
                     <p class="text-secondary font-italic"> Se enviará la invitación a la cuenta del usuario con el correo indicado.</p>
                 </div>
                 <div class="col-lg-4 mb-3">
@@ -38,7 +38,7 @@
 
             <div class="form-row justify-content-around">
                 <button class="btn btn-primary" type="submit">Enviar invitación</button>
-                <a class="btn btn-primary" type="submit">Cancelar</a>
+                <a class="btn btn-primary" href="/misAlmacenes/{{Auth::user()->id}}/{{$idUsuarioAlmacen}}/almacen/{{$idAlmacen}}">Cancelar</a>
             </div>
         </form>
     </div>

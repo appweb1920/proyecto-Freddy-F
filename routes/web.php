@@ -29,6 +29,9 @@ Route::get('/misAlmacenes/{idUsuario}/{idUsuarioAlmacen}/almacen/{idAlmacen}', '
 Route::get('/misAlmacenes/{idUsuario}/{idUsuarioAlmacen}/almacen/{idAlmacen}/invitarUsuario', 'InvitacionesAlmacenController@create')->middleware('auth');
 Route::post('/invitarUsuario', 'InvitacionesAlmacenController@store')->middleware('auth');
 
+Route::get('/invitacionesRecibidas/{idUsuario}', 'InvitacionesAlmacenController@indexParaUsuario')->middleware('auth');
+Route::post('/invitacionesRecibidas/respuestaInvitacion', 'InvitacionesAlmacenController@update')->middleware('auth');
+Route::post('/invitacionesRecibidas/eliminaInvitacion', 'InvitacionesAlmacenController@destroy')->middleware('auth');
 
 Route::get('/ejemplos', function () {
     return view('/layouts.ejemplos'); 

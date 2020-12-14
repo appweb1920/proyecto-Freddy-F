@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Almacen;
+use App\InvitacionesAlmacen;
 use Illuminate\Http\Request;
 
 use App\UsuariosAlmacen;
+use App\Http\Controllers\InvitacionesAlmacenController;
+
 
 class AlmacenController extends Controller
 {
@@ -85,41 +88,19 @@ class AlmacenController extends Controller
         $Almacen = new Almacen();
         $Almacen->nombreAlmacen = $request->nombreAlmacen;
         $Almacen->descripcion = $request->descripcion;
-        //Guardar y crear al propietario
+        //Guardar y crear al propietario asociado al almacen creado
         if ($Almacen->save()){
             $usuarioAlmacen = new UsuariosAlmacen();
             $usuarioAlmacen->idUsuario = $request->idUsuario; //Propietario
             $usuarioAlmacen->idAlmacen = $Almacen->id;
             $usuarioAlmacen->tipoDeAcceso = "propietario";
-            $usuarioAlmacen->save();
-            //NOTA: Pendiente ver donde crear y ASIGNAR EL ROL
-            // return redirect("/almacen/{id}");
-            $redirectTo = "/misAlmacenes"."/".$request->idUsuario;
-            return redirect($redirectTo);
-        } else {
-            $mensaje = "No se ha podido completar la petición, intente más tarde.";
-            return view("/crearAlmacen")->with('mensaje', $mensaje);
-        }
-    }
-
-    public function show($idUsuario, $idUsuarioAlmacen, $idAlmacen){
-        //Buscamos la informacion de almacen junto con los permisos del usuario (de 'usuariosAlmacen')
-        // donde los datos de consulta coincidan.
-        $datosAlmacen = Almacen::join('usuariosAlmacen', 'usuariosAlmacen.idAlmacen', '=', 'almacen.id')
-                    ->where('almacen.id', $idAlmacen)
-                    ->where('usuariosAlmacen.id', $idUsuarioAlmacen)
-                    ->where('usuariosAlmacen.idUsuario', $idUsuario)
-                    ->get()->first();
-        // dd($datosAlmacen);
-
-        // $datosAlmacen = UsuariosAlmacen::where('usuariosAlmacen.id', $idUsuarioAlmacen)
-        //                     ->join('almacen', 'usuariosAlmacen.idAlmacen', '=', 'almacen.id')
-        //                     ->where('almacen.id', $idAlmacen)
-        //                     ->where('usuariosAlmacen.idUsuario', $idUsuario)
-        //                     ->get();
-        // dd($datosAlmacen);
-        
-        return view('almacen')->with('datosAlmacen', $datosAlmacen)->with('idUsuario', $idUsuario);
+            if($usuarioAlmacen->save()){
+                $redirectTo = "/misAlmacenes"."/".$request->idUsuario."/".$usuarioAlmacen->id."/almacen/".$Almacen->id;
+                return redirect($redirectTo);
+            }
+        } 
+        $mensaje = "No se ha podido completar la petición, intente más tarde.";
+        return view("/crearAlmacen")->with('mensaje', $mensaje);
     }
 
     /**
@@ -128,20 +109,26 @@ class AlmacenController extends Controller
      * @param  \App\Almacen  $almacen
      * @return \Illuminate\Http\Response
      */
-    // public function show(Almacen $almacen, $idUsuario, $idAlmacen)
-    // public function show(Request $request)
-    // {
-    //     // $almacen = Almacen::find($idAlmacen);
-    //     // $usuarioAlmacen = UsuarioAlmacen::find($idUsuario); //NOTA: ERROR, debe indicarse el id del UsuarioAlmacen no el idUsuario.
-    //     // dd($almacen, $idUsuario);
-    //     // return view('almacen')->with('almacen', $almacen)->with('usuarioAlmacen',$usuarioAlmacen);
-    //     $almacen = Almacen::find($request->idAlmacen);
-    //     if ($request->tipoAcceso == 'propietario')
-    //         return view('almacen')->with('almacen', $almacen);
-    //     else
-    //         return view('almacen')->with('almacen', $almacen);
-    //     // $usuarioAlmacen = Almacen::find($request->idUsuario);
-    // }
+    public function show($idUsuario, $idUsuarioAlmacen, $idAlmacen){
+        //Buscamos la informacion de almacen junto con los permisos del usuario (de 'usuariosAlmacen')
+        // donde los datos de consulta coincidan.
+        $datosAlmacen = Almacen::join('usuariosAlmacen', 'usuariosAlmacen.idAlmacen', '=', 'almacen.id')
+                    ->where('almacen.id', $idAlmacen)
+                    ->where('usuariosAlmacen.id', $idUsuarioAlmacen)
+                    ->where('usuariosAlmacen.idUsuario', $idUsuario)
+                    ->get()->first();
+        
+        //Obten la lista de invitados al almacen siempre que la consulta sea valida
+        $invitacionesEnviadas = ( is_null($datosAlmacen) )? 
+                            null:
+                            (new InvitacionesAlmacenController())->indexParaAlmacen($idAlmacen);
+
+        return view('almacen')
+                ->with('datosAlmacen', $datosAlmacen)
+                ->with('idUsuario', $idUsuario)
+                ->with('invitacionesEnviadas',$invitacionesEnviadas);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

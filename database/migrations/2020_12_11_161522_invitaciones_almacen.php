@@ -27,6 +27,7 @@ class InvitacionesAlmacen extends Migration
                 ->onDelete('cascade');
             $table->string('emailUsuarioInvitado');
             $table->string('tipoDeAcceso');
+            $table->string('estadoInvitacion');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -82,8 +82,14 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="/misAlmacenes/{{ Auth::user()->id }}">Mis almacenes</a>
                             <a class="dropdown-item" href="/crearNuevoAlmacen">Crear nuevo almacén</a>
+                            <a class="dropdown-item" href="/invitacionesRecibidas/{{ Auth::user()->id }}">Invitaciones recibidas</a>
                         </div>
                     </li>
+                    @if( Session::has('invitaciones') )
+                    <li class="nav-item">
+                        <a class="nav-link info" href="/misInvitaciones">Invitaciones pendientes {{ Session::get('numInvitaciones') }}</a>
+                    </li>
+                    @endif
                     <!-- NOTA: Barra de busqueda sin implementar -->
                     <!-- <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

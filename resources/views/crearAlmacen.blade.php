@@ -36,7 +36,7 @@
             @endisset
             <div class="form-row justify-content-around">
                 <button class="btn btn-primary" type="submit">Registrar Almacén</button>
-                <a class="btn btn-primary" type="submit">Cancelar</a>
+                <a class="btn btn-primary" href="/misAlmacenes/{{Auth::user()->id}}">Cancelar</a>
             </div>
         </form>
     </div>
