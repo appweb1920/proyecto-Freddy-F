@@ -44,7 +44,6 @@ class RecetasSeeder extends Seeder
                 ]);
             }
         }
-
         
         //idReceta 6
         DB::table('recetas')->insert([

@@ -22,7 +22,7 @@
 <body>
     <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-colorPrimario">
-            <a class="navbar-brand" href="{{ url('/') }}">Proyecto Web</a>
+            <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Proyecto Web') }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -41,7 +41,7 @@
                             </li>
                         @endif
                     @else
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown active">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->nombre }}
                             </a>
@@ -69,13 +69,13 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="/crearNuevoAlmacen">Crear Almacén</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="#">Ver Receta X</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Almacenes
                         </a>

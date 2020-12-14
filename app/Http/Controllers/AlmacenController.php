@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\UsuariosAlmacen;
 use App\Http\Controllers\InvitacionesAlmacenController;
-
+use App\IngredientesAlmacen;
 
 class AlmacenController extends Controller
 {
@@ -108,20 +108,22 @@ class AlmacenController extends Controller
                     ->where('usuariosAlmacen.idUsuario', $idUsuario)
                     ->get()->first();
         
-        $usuariosDeAlmacen = ( is_null($datosAlmacen) )? 
-                            null: 
-                            (new UsuariosAlmacen)->usuariosDeUnAlmacen($idAlmacen);
+        //Obten la lista de invitados al almacen, usuarios y os ingredientes siempre que la consulta 
+        //del acceso sea valida.
+        $usuariosDeAlmacen = $invitacionesEnviadas = $ingredientesDelAlmacen = null;
+        if (is_null($datosAlmacen)){
+            $usuariosDeAlmacen = (new UsuariosAlmacen)->usuariosDeUnAlmacen($idAlmacen);
+            $invitacionesEnviadas = (new InvitacionesAlmacenController())->indexParaAlmacen($idAlmacen);
+            $ingredientesDelAlmacen = (new IngredientesAlmacen())->ingredientesDeAlmacen($idAlmacen);
+        }
 
         //Obten la lista de invitados al almacen siempre que la consulta sea valida
-        $invitacionesEnviadas = ( is_null($datosAlmacen) )? 
-                            null:
-                            (new InvitacionesAlmacenController())->indexParaAlmacen($idAlmacen);
-
         return view('almacen')
                 ->with('datosAlmacen', $datosAlmacen)
                 ->with('idUsuario', $idUsuario)
                 ->with('usuariosDeAlmacen', $usuariosDeAlmacen)
-                ->with('invitacionesEnviadas',$invitacionesEnviadas);
+                ->with('invitacionesEnviadas',$invitacionesEnviadas)
+                ->with('ingredientesDelAlmacen', $ingredientesDelAlmacen);
     }
 
 

@@ -31,9 +31,57 @@
             <!-- Secciones -->
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade @if(!Session::has('verInvitaciones') || !Session::has('verUsuarios')) show active @endif" id="ingredientes" role="tabpanel" aria-labelledby="ingredientes-tab">
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dolores quasi distinctio veritatis rerum aperiam, dolore fugiat pariatur porro ratione ipsa cupiditate excepturi delectus eveniet veniam debitis laborum non tempore!
-                    </p>
+                @unless( count($ingredientesDelAlmacen))
+                    <p class="text-center text-secondary ">No hay ingredientes en el almacén</p>
+                @else
+                    <p class="text-center text-secondary ">Las invitaciones enviadas vencen a los 7 días sin respuesta</p>
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Nombre de Ingrediente</th>
+                                <th scope="col">Medición del producto en almacén</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Caducidad</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach( $ingredientesDelAlmacen as $key => $ingrediente )
+                            <tr>
+                                <th scope="row">{{$key+1}}</th>
+                                <td class="text-capitalize">{{$ingrediente->nombreIngrediente}}</td>
+                                <td class="text-capitalize">{{$ingrediente->tipoDeMedicionAlmacen }}</td>
+                                <td class="text-capitalize">{{$ingrediente->cantidad }}</td>
+                                <!-- $ingrediente->factorDeConversion -->
+                                <td class="text-capitalize">
+                                    @if($ingrediente->$conCaducidad) 
+                                        {{date_format($ingrediente->$fechaCaducidad, 'd/m/Y')}} 
+                                    @else 
+                                        Sin caducidad
+                                    @endif
+                                </td>
+                                <!-- <td>
+                                    <form action="/restockIngredienteAlmacen" method="post">
+                                        @csrf
+                                        <input type="hidden" name="idIngredienteAlmacen" value="{{$ingrediente->id}}">
+                                        <input type="hidden" name="idIngredienteAsociado" value="{{$ingrediente->idIngrediente}}">
+                                        <button class="btn btn-link m-1 p-0" type="submit">Eliminar</button>
+                                    </form>
+                                    @if($datosAlmacen->tipoDeAcceso == 'propietario')
+                                    <form action="/modificarIngredienteDeAlmacen" method="post">
+                                        @csrf
+                                        <input type="hidden" name="idIngredienteAlmacen" value="{{$ingrediente->id}}">
+                                        <input type="hidden" name="idIngredienteAsociado" value="{{$ingrediente->idIngrediente}}">
+                                        <button class="btn btn-link m-1 p-0" type="submit">Eliminar</button>
+                                    </form>
+                                    @endif
+                                </td> -->
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endunless
                 </div>
                 <div class="tab-pane fade @if(Session::has('verUsuarios')) show active @endif" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
                     <table class="table table-hover">

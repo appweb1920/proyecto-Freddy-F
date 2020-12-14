@@ -35,9 +35,9 @@ Route::post('/invitacionesRecibidas/eliminaInvitacion', 'InvitacionesAlmacenCont
 
 Route::post('/eliminaUsuarioDeAlmacen', 'UsuariosAlmacenController@destroy')->middleware('auth');
 
-Route::get('/ejemplos', function () {
-    return view('/layouts.ejemplos'); 
-});
+// Route::get('/ejemplos', function () {
+//     return view('/layouts.ejemplos'); 
+// });
 
 
 
