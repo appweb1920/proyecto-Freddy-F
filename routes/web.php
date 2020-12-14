@@ -33,6 +33,8 @@ Route::get('/invitacionesRecibidas/{idUsuario}', 'InvitacionesAlmacenController@
 Route::post('/invitacionesRecibidas/respuestaInvitacion', 'InvitacionesAlmacenController@update')->middleware('auth');
 Route::post('/invitacionesRecibidas/eliminaInvitacion', 'InvitacionesAlmacenController@destroy')->middleware('auth');
 
+Route::post('/eliminaUsuarioDeAlmacen', 'UsuariosAlmacenController@destroy')->middleware('auth');
+
 Route::get('/ejemplos', function () {
     return view('/layouts.ejemplos'); 
 });

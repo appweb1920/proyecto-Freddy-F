@@ -19,17 +19,6 @@ class AlmacenController extends Controller
      */
     public function index($idUsuario)
     {
-        /* NOTA: REMPLAZADO POR CONSULTA MEJORADA (JOIN)
-        //Obten los ID de los almacenes donde este el usuario
-        $idAlmacenes = UsuariosAlmacen::where('idUsuario', $idUsuario)->get('idAlmacen');
-        // $tiposDeAcceso = UsuariosAlmacen::where('idUsuario', $idUsuario)->get('tipoDeAcceso');
-        
-        //Obten los Almacenes con determinadas ID.
-        $almacenes = Almacen::whereIn('id', $idAlmacenes)->get();
-        return view('/verAlmacenes')->with('almacenes', $almacenes);
-        */
-        
-        //NOTA: CONSULTA JOIN CON MODELOS EN LARAVEL
         // Obtenemos los ID de los almacenes a los que tiene el usuario, y el tipo de acceso.
         // Luego unimos la información de los almacenes que tienen esos ID.
         // (JOIN DONDE: "almacen.id"="usuariosAlmacen.idAlmacen")
@@ -51,13 +40,6 @@ class AlmacenController extends Controller
         //         ->orderByDesc('start_date')
         //         ->limit(1);
         // }, 'Pro')->get();
-
-        //NOTA: CONSULTA A BASE DE DATOS CON LARAVEL
-        // DB::table('usuariosAlmacen')
-        //     ->join('contacts', 'users.id', '=', 'contacts.user_id')
-        //     ->join('orders', 'users.id', '=', 'orders.user_id')
-        //     ->select('users.*', 'contacts.phone', 'orders.price')
-        //     ->get();
         
         //NOTA: CONSULTA A BASE DE DATOS (SENTENCIA SQL PARCIAL) CON LARAVEL
         // $users = DB::table('users')
@@ -65,6 +47,14 @@ class AlmacenController extends Controller
         //              ->where('status', '<>', 1)
         //              ->groupBy('status')
         //              ->get();
+
+        // $puntosRecoleccion = DB::select(
+        //     'SELECT * 
+        //      FROM detallesRecolector d, recolectores r, puntosDeReciclaje p
+        //      WHERE d.idPuntoReciclaje = p.id AND d.idRecolector = r.id 
+        //      AND r.id = ?', [$this->id]);
+        
+        // dd($puntosRecoleccion);
     }
 
     /**
@@ -118,6 +108,10 @@ class AlmacenController extends Controller
                     ->where('usuariosAlmacen.idUsuario', $idUsuario)
                     ->get()->first();
         
+        $usuariosDeAlmacen = ( is_null($datosAlmacen) )? 
+                            null: 
+                            (new UsuariosAlmacen)->usuariosDeUnAlmacen($idAlmacen);
+
         //Obten la lista de invitados al almacen siempre que la consulta sea valida
         $invitacionesEnviadas = ( is_null($datosAlmacen) )? 
                             null:
@@ -126,6 +120,7 @@ class AlmacenController extends Controller
         return view('almacen')
                 ->with('datosAlmacen', $datosAlmacen)
                 ->with('idUsuario', $idUsuario)
+                ->with('usuariosDeAlmacen', $usuariosDeAlmacen)
                 ->with('invitacionesEnviadas',$invitacionesEnviadas);
     }
 

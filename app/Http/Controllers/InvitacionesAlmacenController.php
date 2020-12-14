@@ -155,6 +155,7 @@ class InvitacionesAlmacenController extends Controller
         $invitacionesAlmacen = InvitacionesAlmacen::find($request->idInvitacion);
         $invitacionesAlmacen->estadoInvitacion = $request->respuestaInvitacion;
         $invitacionesAlmacen->save();
+        //Si acepta la invitación crea el usuario para ese almacen con el tipo de acceso indicado.
         if( $invitacionesAlmacen->estadoInvitacion == 'aceptada' ){
             $usuarioAlmacen = new UsuariosAlmacen();
             $usuarioAlmacen->idUsuario = $request->idUsuario; //Propietario

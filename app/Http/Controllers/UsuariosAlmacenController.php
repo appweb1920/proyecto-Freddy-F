@@ -78,8 +78,9 @@ class UsuariosAlmacenController extends Controller
      * @param  \App\UsuariosAlmacen  $usuariosAlmacen
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UsuariosAlmacen $usuariosAlmacen)
+    public function destroy(Request $request ,UsuariosAlmacen $usuariosAlmacen)
     {
-        //
+        (UsuariosAlmacen::find($request->idUsuarioAlmacen))->delete();
+        return redirect()->back()->with('verUsuarios', true);
     }
 }

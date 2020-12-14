@@ -16,10 +16,10 @@
             <!-- Selectores de Secciones -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link text-colorPrimario active" id="ingredientes-tab" data-toggle="tab" href="#ingredientes" role="tab" aria-controls="ingredientes" aria-selected="@if(Session::has('verInvitaciones')) false @else true @endif">Inventario de ingredientes</a>
+                    <a class="nav-link text-colorPrimario active" id="ingredientes-tab" data-toggle="tab" href="#ingredientes" role="tab" aria-controls="ingredientes" aria-selected="@if(Session::has('verInvitaciones') || Session::has('verUsuarios')) false @else true @endif">Inventario de ingredientes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-colorPrimario" id="usuarios-tab" data-toggle="tab" href="#usuarios" role="tab" aria-controls="usuarios" aria-selected="false">Usuarios</a>
+                    <a class="nav-link text-colorPrimario" id="usuarios-tab" data-toggle="tab" href="#usuarios" role="tab" aria-controls="usuarios" aria-selected="@if(Session::has('verUsuarios')) true @else false @endif">Usuarios</a>
                 </li>
                 @if( $datosAlmacen->tipoDeAcceso == "propietario")
                 <!-- Opciones para el propietario -->
@@ -30,20 +30,49 @@
             </ul>
             <!-- Secciones -->
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade @if(!Session::has('verInvitaciones')) show active @endif" id="ingredientes" role="tabpanel" aria-labelledby="ingredientes-tab">
+                <div class="tab-pane fade @if(!Session::has('verInvitaciones') || !Session::has('verUsuarios')) show active @endif" id="ingredientes" role="tabpanel" aria-labelledby="ingredientes-tab">
                     <p>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dolores quasi distinctio veritatis rerum aperiam, dolore fugiat pariatur porro ratione ipsa cupiditate excepturi delectus eveniet veniam debitis laborum non tempore!
                     </p>
                 </div>
-                <div class="tab-pane fade" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla facere maxime ipsa omnis quas rem a neque. Omnis debitis sed ullam. Hic dolorem odio autem nesciunt laudantium provident sed amet.
-                        Saepe voluptate iure fugiat cum nostrum, accusamus harum accusantium voluptas voluptates aliquam sit optio dolorem impedit architecto molestias sunt sint adipisci id doloremque in vero fuga. Labore iusto maiores odio?
-                        Ratione magni nisi quo omnis amet explicabo laboriosam aliquid deserunt tempore asperiores doloremque nesciunt similique natus fugiat dolor dolores autem hic, distinctio ipsam est. Numquam ipsum repellendus nobis animi minima!
-                    </p>
+                <div class="tab-pane fade @if(Session::has('verUsuarios')) show active @endif" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Tipo de acceso</th>
+                                @if($datosAlmacen->tipoDeAcceso == 'propietario')<th></th>@endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            @foreach( $usuariosDeAlmacen as $key => $usuariosDeAlmacen )
+                            <tr>
+                                <th scope="row">{{$key+1}}</th>
+                                <td class="text-capitalize">{{$usuariosDeAlmacen->nickname}}</td>
+                                <td class="text-capitalize">{{$usuariosDeAlmacen->nombre . ' ' . $usuariosDeAlmacen->apellidos }}</td>
+                                <td class="text-capitalize">{{$usuariosDeAlmacen->email}}</td>
+                                <td class="text-capitalize">{{$usuariosDeAlmacen->tipoDeAcceso}}</td>
+                                @if($usuariosDeAlmacen->tipoDeAcceso == 'invitado' && $datosAlmacen->tipoDeAcceso == 'propietario')
+                                <td>
+                                    <form action="/eliminaUsuarioDeAlmacen" method="post">
+                                        @csrf
+                                        <input type="hidden" name="idUsuarioAlmacen" value="{{$usuariosDeAlmacen->id}}">
+                                        <button class="btn btn-link m-1 p-0" type="submit">Eliminar</button>
+                                    </form>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                @if( $datosAlmacen->tipoDeAcceso == "propietario")
+
                 <!-- Opciones para el propietario -->
+                @if( $datosAlmacen->tipoDeAcceso == "propietario")
                 <div class="tab-pane fade @if(Session::has('verInvitaciones')) show active @endif" id="invitaciones" role="tabpanel" aria-labelledby="invitaciones-tab">
                     <div class="d-flex mx-3 my-3">
                         <a href="/misAlmacenes/{{Auth::user()->id}}/{{$datosAlmacen->id}}/almacen/{{$datosAlmacen->idAlmacen}}/invitarUsuario" 
@@ -67,7 +96,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
                                 @for( $i=0; $i < count($invitacionesEnviadas); $i++ )
                                 <tr>
                                     <th scope="row">{{$i+1}}</th>
