@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             AlmacenSeeder::class,
             UsuariosAlmacenSeeder::class,
+            IngredientesSeeder::class,
             RecetasSeeder::class,
         ]);
     }

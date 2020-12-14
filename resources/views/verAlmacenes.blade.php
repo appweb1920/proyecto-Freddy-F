@@ -8,9 +8,9 @@
     <div class="row justify-content-center">
         <h1>Mis almacenes disponibles</h1>
     </div>
-    <div class="row d-flex flex-wrap">
-        @foreach($almacenes as $almacen)
-        <div class="card mx-auto my-auto col-12 col-md-6 col-xl-4">
+    <div class="row d-flex">
+        @foreach($almacenes as $key => $almacen)
+        <div class="card my-auto p-n1 col-12 col-md-6 col-xl-4">
             <div class="card-body">
                 <h5 class="card-title">{{$almacen->nombreAlmacen}}</h5>
                 <p class="card-text font-weight-light text-truncate">{{$almacen->descripcion}}</p>

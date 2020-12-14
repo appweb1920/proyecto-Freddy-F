@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PasosDeReceta extends Migration
+class IngredientesReceta extends Migration
 {
-    use SoftDeletes;
     /**
      * Run the migrations.
      *
@@ -15,14 +13,19 @@ class PasosDeReceta extends Migration
      */
     public function up()
     {
-        Schema::create('pasosDeReceta', function (Blueprint $table) {
+        Schema::create('ingredientesReceta', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('idIngrediente')
+                ->constrained('ingredientes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('idReceta')
                 ->constrained('recetas')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->integer('numPaso');
-            $table->text('textoPaso');
+            $table->float('cantidad');
+            $table->string('tipoDeCantidad'); //*detalles por resolver
+            $table->string('tipoDeMedida'); //*detalles por resolver
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,8 +38,8 @@ class PasosDeReceta extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('pasosDeReceta');
-        Schema::create('pasosDeReceta', function (Blueprint $table) {
+        //Schema::dropIfExists('ingredientesReceta');
+        Schema::create('ingredientesReceta', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Recetas;
+use App\IngredientesReceta;
 use Illuminate\Http\Request;
 
-class RecetasController extends Controller
+class IngredientesRecetaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class RecetasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Recetas  $recetas
+     * @param  \App\IngredientesReceta  $ingredientesReceta
      * @return \Illuminate\Http\Response
      */
-    public function show(Recetas $recetas)
+    public function show(IngredientesReceta $ingredientesReceta)
     {
         //
     }
@@ -52,10 +52,10 @@ class RecetasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Recetas  $recetas
+     * @param  \App\IngredientesReceta  $ingredientesReceta
      * @return \Illuminate\Http\Response
      */
-    public function edit(Recetas $recetas)
+    public function edit(IngredientesReceta $ingredientesReceta)
     {
         //
     }
@@ -64,10 +64,10 @@ class RecetasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Recetas  $recetas
+     * @param  \App\IngredientesReceta  $ingredientesReceta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recetas $recetas)
+    public function update(Request $request, IngredientesReceta $ingredientesReceta)
     {
         //
     }
@@ -75,12 +75,11 @@ class RecetasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Recetas  $recetas
+     * @param  \App\IngredientesReceta  $ingredientesReceta
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Recetas $recetas)
+    public function destroy(IngredientesReceta $ingredientesReceta)
     {
         //
     }
-
 }
