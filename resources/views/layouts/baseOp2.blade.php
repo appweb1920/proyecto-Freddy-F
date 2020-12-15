@@ -73,7 +73,7 @@
                         <a class="nav-link" href="/crearNuevoAlmacen">Crear Almacén</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Ver Receta X</a>
+                        <a class="nav-link" href="/listaDeRecetas">Ver Recetas</a>
                     </li>
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

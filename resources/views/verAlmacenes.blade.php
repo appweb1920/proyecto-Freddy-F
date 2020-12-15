@@ -9,6 +9,17 @@
         <h1>Mis almacenes disponibles</h1>
     </div>
     <div class="row d-flex">
+        <d class="col-12 justify-content-center">
+            @unless(count($almacenes))
+            <p class="text-center text-secondary">Aún no tienes acceso a nungún almacén</p>
+            <p class="text-center text-secondary mt-5">
+                Puedes <a class="btn btn-link m-1 p-0" href="/crearNuevoAlmacen">crear uno nuevo</a> 
+                o revisar tus <a class="btn btn-link m-1 p-0" href="/invitacionesRecibidas/{{ Auth::user()->id }}">invitaciones </a> para revisar si te han invitado a alguno.
+            </p>
+            @else
+            <p class="text-center text-secondary mt-5">Estos son los almacenes a los que tienes acceso.</p>
+            @endif
+        </d>
         @foreach($almacenes as $key => $almacen)
         <div class="card my-auto p-n1 col-12 col-md-6 col-xl-4">
             <div class="card-body">

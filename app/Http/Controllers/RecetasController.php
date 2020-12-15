@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Recetas;
 use Illuminate\Http\Request;
+use App\IngredientesReceta;
+use App\PasosDeReceta;
 
 class RecetasController extends Controller
 {
@@ -14,7 +16,7 @@ class RecetasController extends Controller
      */
     public function index()
     {
-        //
+        return view('listaRecetas')->with('recetas', Recetas::all());
     }
 
     /**
@@ -44,9 +46,21 @@ class RecetasController extends Controller
      * @param  \App\Recetas  $recetas
      * @return \Illuminate\Http\Response
      */
-    public function show(Recetas $recetas)
+    public function show($idReceta)
     {
-        //
+        // $receta = $recetas->find($idReceta);
+        $receta = Recetas::find($idReceta);
+        
+        $ingredientesDeReceta = $pasosReceta = null;
+        if ( !is_null($receta) ){
+            $ingredientesDeReceta = (new IngredientesReceta())->getIngredientesDeReceta($idReceta);
+            $pasosReceta = (new PasosDeReceta())->getPasosDeReceta($idReceta);
+        }
+
+        return view('verReceta')
+                ->with('receta', $receta)
+                ->with('ingredientes', $ingredientesDeReceta)
+                ->with('pasosReceta', $pasosReceta);
     }
 
     /**

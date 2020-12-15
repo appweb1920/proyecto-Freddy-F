@@ -26,6 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect('/misAlmacenes/'.Auth::user()->id);
+        // return redirect('/misAlmacenes/'.Auth::user()->id);
+        return view('home');
     }
 }

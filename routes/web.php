@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecetasController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 /*
@@ -35,6 +36,16 @@ Route::post('/invitacionesRecibidas/eliminaInvitacion', 'InvitacionesAlmacenCont
 
 Route::post('/eliminaUsuarioDeAlmacen', 'UsuariosAlmacenController@destroy')->middleware('auth');
 
+
+Route::get('/listaDeRecetas', 'RecetasController@index')->middleware('auth'); //Quizas pueda dejarse público.
+Route::get('/listaDeRecetas/verReceta/{idReceta}', 'RecetasController@show')->middleware('auth'); //Quizas pueda dejarse público.
+
+
+Route::get('/ver/ver2/{id}', function () {
+    return view('prueba'); 
+});
+
+
 // Route::get('/ejemplos', function () {
 //     return view('/layouts.ejemplos'); 
 // });
@@ -46,4 +57,5 @@ Route::post('/eliminaUsuarioDeAlmacen', 'UsuariosAlmacenController@destroy')->mi
 Route::post('/nuevaRefaccion', "piezasRefaccionController@store");
 Route::get('/editarRegistro/{id}', "piezasRefaccionController@edit");
 */
+
 

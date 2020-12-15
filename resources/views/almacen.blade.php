@@ -31,10 +31,9 @@
             <!-- Secciones -->
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade @if(!Session::has('verInvitaciones') || !Session::has('verUsuarios')) show active @endif" id="ingredientes" role="tabpanel" aria-labelledby="ingredientes-tab">
-                @unless( count($ingredientesDelAlmacen))
+                @unless( count($ingredientesDelAlmacen) )
                     <p class="text-center text-secondary ">No hay ingredientes en el almacén</p>
                 @else
-                    <p class="text-center text-secondary ">Las invitaciones enviadas vencen a los 7 días sin respuesta</p>
                     <table class="table table-hover">
                         <thead class="thead-dark">
                             <tr>
@@ -84,39 +83,43 @@
                 @endunless
                 </div>
                 <div class="tab-pane fade @if(Session::has('verUsuarios')) show active @endif" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
-                    <table class="table table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Usuario</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Tipo de acceso</th>
-                                @if($datosAlmacen->tipoDeAcceso == 'propietario')<th></th>@endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            @foreach( $usuariosDeAlmacen as $key => $usuariosDeAlmacen )
-                            <tr>
-                                <th scope="row">{{$key+1}}</th>
-                                <td class="text-capitalize">{{$usuariosDeAlmacen->nickname}}</td>
-                                <td class="text-capitalize">{{$usuariosDeAlmacen->nombre . ' ' . $usuariosDeAlmacen->apellidos }}</td>
-                                <td class="text-capitalize">{{$usuariosDeAlmacen->email}}</td>
-                                <td class="text-capitalize">{{$usuariosDeAlmacen->tipoDeAcceso}}</td>
-                                @if($usuariosDeAlmacen->tipoDeAcceso == 'invitado' && $datosAlmacen->tipoDeAcceso == 'propietario')
-                                <td>
-                                    <form action="/eliminaUsuarioDeAlmacen" method="post">
-                                        @csrf
-                                        <input type="hidden" name="idUsuarioAlmacen" value="{{$usuariosDeAlmacen->id}}">
-                                        <button class="btn btn-link m-1 p-0" type="submit">Eliminar</button>
-                                    </form>
-                                </td>
-                                @endif
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @unless( count($usuariosDeAlmacen))
+                        <p class="text-center text-secondary ">No hay usuarios vinculados a este almacén.</p>
+                    @else
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Tipo de acceso</th>
+                                    @if($datosAlmacen->tipoDeAcceso == 'propietario')<th></th>@endif
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach( $usuariosDeAlmacen as $key => $usuariosDeAlmacen )
+                                <tr>
+                                    <th scope="row">{{$key+1}}</th>
+                                    <td class="text-capitalize">{{$usuariosDeAlmacen->nickname}}</td>
+                                    <td class="text-capitalize">{{$usuariosDeAlmacen->nombre . ' ' . $usuariosDeAlmacen->apellidos }}</td>
+                                    <td class="text-capitalize">{{$usuariosDeAlmacen->email}}</td>
+                                    <td class="text-capitalize">{{$usuariosDeAlmacen->tipoDeAcceso}}</td>
+                                    @if($usuariosDeAlmacen->tipoDeAcceso == 'invitado' && $datosAlmacen->tipoDeAcceso == 'propietario')
+                                    <td>
+                                        <form action="/eliminaUsuarioDeAlmacen" method="post">
+                                            @csrf
+                                            <input type="hidden" name="idUsuarioAlmacen" value="{{$usuariosDeAlmacen->id}}">
+                                            <button class="btn btn-link m-1 p-0" type="submit">Eliminar</button>
+                                        </form>
+                                    </td>
+                                    @endif
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endunless
                 </div>
 
                 <!-- Opciones para el propietario -->
@@ -154,18 +157,18 @@
                                     <td class="text-capitalize">{{$invitacionesEnviadas[$i]->estadoInvitacion}}</td>
                                     <td>
                                         
-                                            @if($invitacionesEnviadas[$i]->estadoInvitacion == 'pendiente')
-                                            <form action="/invitacionesRecibidas/respuestaInvitacion" method="post">
-                                                @csrf
-                                                <input type="hidden" name="idInvitacion" value="{{$invitacionesEnviadas[$i]->id}}">
-                                                <button class="btn btn-link m-1 p-0" type="submit" name="respuestaInvitacion" value="cancelada">Cancelar</button>
-                                            </form>
-                                            @endif
-                                            <form action="/invitacionesRecibidas/eliminaInvitacion" method="post">
-                                                @csrf
-                                                <input type="hidden" name="idInvitacion" value="{{$invitacionesEnviadas[$i]->id}}">
-                                                <button class="btn btn-link m-1 p-0" type="submit" value="{{$invitacionesEnviadas[$i]->estadoInvitacion}}">Eliminar</button>
-                                            </form>
+                                        @if($invitacionesEnviadas[$i]->estadoInvitacion == 'pendiente')
+                                        <form action="/invitacionesRecibidas/respuestaInvitacion" method="post">
+                                            @csrf
+                                            <input type="hidden" name="idInvitacion" value="{{$invitacionesEnviadas[$i]->id}}">
+                                            <button class="btn btn-link m-1 p-0" type="submit" name="respuestaInvitacion" value="cancelada">Cancelar</button>
+                                        </form>
+                                        @endif
+                                        <form action="/invitacionesRecibidas/eliminaInvitacion" method="post">
+                                            @csrf
+                                            <input type="hidden" name="idInvitacion" value="{{$invitacionesEnviadas[$i]->id}}">
+                                            <button class="btn btn-link m-1 p-0" type="submit" value="{{$invitacionesEnviadas[$i]->estadoInvitacion}}">Eliminar</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endfor

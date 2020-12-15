@@ -64,7 +64,7 @@ class AlmacenController extends Controller
      */
     public function create()
     {
-        return view("/crearAlmacen");
+        return view("crearAlmacen");
     }
 
     /**
@@ -90,7 +90,7 @@ class AlmacenController extends Controller
             }
         } 
         $mensaje = "No se ha podido completar la petición, intente más tarde.";
-        return view("/crearAlmacen")->with('mensaje', $mensaje);
+        return view("crearAlmacen")->with('mensaje', $mensaje);
     }
 
     /**
@@ -111,12 +111,12 @@ class AlmacenController extends Controller
         //Obten la lista de invitados al almacen, usuarios y os ingredientes siempre que la consulta 
         //del acceso sea valida.
         $usuariosDeAlmacen = $invitacionesEnviadas = $ingredientesDelAlmacen = null;
-        if (is_null($datosAlmacen)){
+        if (!is_null($datosAlmacen)){
             $usuariosDeAlmacen = (new UsuariosAlmacen)->usuariosDeUnAlmacen($idAlmacen);
-            $invitacionesEnviadas = (new InvitacionesAlmacenController())->indexParaAlmacen($idAlmacen);
-            $ingredientesDelAlmacen = (new IngredientesAlmacen())->ingredientesDeAlmacen($idAlmacen);
+            $invitacionesEnviadas = (new InvitacionesAlmacenController)->indexParaAlmacen($idAlmacen);
+            $ingredientesDelAlmacen = (new IngredientesAlmacen)->ingredientesDeAlmacen($idAlmacen);
         }
-
+        
         //Obten la lista de invitados al almacen siempre que la consulta sea valida
         return view('almacen')
                 ->with('datosAlmacen', $datosAlmacen)

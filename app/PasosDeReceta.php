@@ -8,4 +8,11 @@ class PasosDeReceta extends Model
 {
     protected $table = "pasosDeReceta";
     protected $fillable = ['idReceta', 'numPaso', 'textoPaso'];
+
+    public function getPasosDeReceta($idReceta)
+    {
+        return PasosDeReceta::where('idReceta', $idReceta)
+                    ->orderBy('numPaso')
+                    ->get();
+    }
 }
