@@ -36,15 +36,14 @@ Route::post('/invitacionesRecibidas/eliminaInvitacion', 'InvitacionesAlmacenCont
 
 Route::post('/eliminaUsuarioDeAlmacen', 'UsuariosAlmacenController@destroy')->middleware('auth');
 
-
 Route::get('/listaDeRecetas', 'RecetasController@index')->middleware('auth'); //Quizas pueda dejarse público.
 Route::get('/listaDeRecetas/verReceta/{idReceta}', 'RecetasController@show')->middleware('auth'); //Quizas pueda dejarse público.
 
+Route::get('/misAlmacenes/{idUsuario}', 'AlmacenController@index')->middleware('auth');
 
-Route::get('/ver/ver2/{id}', function () {
-    return view('prueba'); 
-});
-
+Route::get('/misAlmacenes/{idUsuario}/{idUsuarioAlmacen}/almacen/{idAlmacen}/agregarIngredientes', 'IngredientesAlmacenController@create')->middleware('auth');
+Route::post('/crearIngredienteEnAlmacen', 'IngredientesAlmacenController@store')->middleware('auth');
+// '/crearIngredienteParaAlmacen'
 
 // Route::get('/ejemplos', function () {
 //     return view('/layouts.ejemplos'); 

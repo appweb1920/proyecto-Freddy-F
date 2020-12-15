@@ -29,7 +29,7 @@ class AlmacenController extends Controller
                                          'usuariosAlmacen.idUsuario', 'usuariosAlmacen.id')
                                 ->get();
         
-        return view('/verAlmacenes')->with('almacenes', $almacenesDeUsuario)->with('idUsuario', $idUsuario);
+        return view('verAlmacenes')->with('almacenes', $almacenesDeUsuario)->with('idUsuario', $idUsuario);
 
         
         //NOTA: SUBCONSULTAS ANIDADAS A BASE DE DATOS USANDO MODELOS CON LARAVEL
@@ -102,11 +102,7 @@ class AlmacenController extends Controller
     public function show($idUsuario, $idUsuarioAlmacen, $idAlmacen){
         //Buscamos la informacion de almacen junto con los permisos del usuario (de 'usuariosAlmacen')
         // donde los datos de consulta coincidan.
-        $datosAlmacen = Almacen::join('usuariosAlmacen', 'usuariosAlmacen.idAlmacen', '=', 'almacen.id')
-                    ->where('almacen.id', $idAlmacen)
-                    ->where('usuariosAlmacen.id', $idUsuarioAlmacen)
-                    ->where('usuariosAlmacen.idUsuario', $idUsuario)
-                    ->get()->first();
+        $datosAlmacen = (new Almacen())->validaCredencialesDeAccesoAlAlmacen($idUsuario, $idUsuarioAlmacen, $idAlmacen);
         
         //Obten la lista de invitados al almacen, usuarios y os ingredientes siempre que la consulta 
         //del acceso sea valida.

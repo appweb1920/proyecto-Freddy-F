@@ -30,7 +30,15 @@
             </ul>
             <!-- Secciones -->
             <div class="tab-content" id="myTabContent">
+
+                <!-- SECCION DE INGREDIENTES -->
                 <div class="tab-pane fade @if(!Session::has('verInvitaciones') || !Session::has('verUsuarios')) show active @endif" id="ingredientes" role="tabpanel" aria-labelledby="ingredientes-tab">
+                @if( $datosAlmacen->tipoDeAcceso == "propietario")
+                    <div class="d-flex mx-3 my-3">
+                        <a href="/misAlmacenes/{{Auth::user()->id}}/{{$datosAlmacen->id}}/almacen/{{$datosAlmacen->idAlmacen}}/agregarIngredientes" 
+                            class="btn btn-primary">Nuevo ingrediente</a>
+                    </div>
+                @endif
                 @unless( count($ingredientesDelAlmacen) )
                     <p class="text-center text-secondary ">No hay ingredientes en el almacén</p>
                 @else
@@ -54,8 +62,8 @@
                                 <td class="text-capitalize">{{$ingrediente->cantidad }}</td>
                                 <!-- $ingrediente->factorDeConversion -->
                                 <td class="text-capitalize">
-                                    @if($ingrediente->$conCaducidad) 
-                                        {{date_format($ingrediente->$fechaCaducidad, 'd/m/Y')}} 
+                                    @if($ingrediente->conCaducidad) 
+                                        {{date_format($ingrediente->fechaCaducidad, 'd/m/Y')}} 
                                     @else 
                                         Sin caducidad
                                     @endif
@@ -82,6 +90,8 @@
                     </table>
                 @endunless
                 </div>
+
+                <!-- SECCION DE USUARIO -->
                 <div class="tab-pane fade @if(Session::has('verUsuarios')) show active @endif" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
                     @unless( count($usuariosDeAlmacen))
                         <p class="text-center text-secondary ">No hay usuarios vinculados a este almacén.</p>
@@ -122,7 +132,7 @@
                     @endunless
                 </div>
 
-                <!-- Opciones para el propietario -->
+                <!-- SECCION DE INVITACIONES -->
                 @if( $datosAlmacen->tipoDeAcceso == "propietario")
                 <div class="tab-pane fade @if(Session::has('verInvitaciones')) show active @endif" id="invitaciones" role="tabpanel" aria-labelledby="invitaciones-tab">
                     <div class="d-flex mx-3 my-3">
