@@ -19,7 +19,7 @@
                 @if(count($ingredientesDelAlmacen)) 
                 <div class="col-lg-7 mb-3">
                     <label for="validationDefault01">Basado en ingrediente existente: </label>
-                    <input type="checkbox" class="form-control" name="usarIngredienteExistente" id="validationDefault01" required>
+                    <input type="checkbox" class="form-control" name="usarIngredienteExistente" id="validationDefault01">
                 </div>
                 <div class="col-lg-5 mb-3">
                     <label for="validationDefault02"> Seleccione ingrediente existente:</label>
