@@ -67,7 +67,6 @@ class ingredientesAlmacenController extends Controller
             $ingrediente->tipoDeMedidaBase = $request->medidaBaseIngrediente;
             if($ingrediente->save())
                 $ingredienteGuardado = true;
-            dd('hola');
         }
         if($ingredienteGuardado){
             $conCaducidad = (is_null($request->fechaCaducidad))? 0:1;
